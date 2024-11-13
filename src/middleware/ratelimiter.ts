@@ -10,8 +10,8 @@ const rateLimited = rateLimit({
     standardHeaders: 'draft-7',
     legacyHeaders: false,
     message: {
+        status: 'rated_limited',
         message: 'You are being rate limited.',
-        success: false,
     },
 });
 

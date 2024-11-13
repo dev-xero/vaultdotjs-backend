@@ -24,6 +24,20 @@
           }
         }
       }
+    },
+    "/v1/auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Creates a new user, returns 201 on successful.",
+        "description": "Rate limited, This endpoint is responsible for creating new users, it triggers validation checks before doing so. Default response code is 201.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
     }
   }
 }

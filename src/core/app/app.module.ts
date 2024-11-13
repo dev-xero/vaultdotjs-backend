@@ -11,6 +11,7 @@ import http from '@constants/http';
 import swaggerSpec from '@docs/gen/swagger.json';
 import cached from '@middleware/cache';
 import notFoundHandler from '@middleware/notfound';
+import { authRouter } from '@core/auth';
 
 /**
  * Application entry point, configures environment variables, middlewares and routers.
@@ -30,12 +31,14 @@ export async function startApplication() {
     app.use(
         '/docs',
         swaggerUi.serve,
-        swaggerUi.setup(swaggerSpec, {
+        await swaggerUi.setup(swaggerSpec, {
             customSiteTitle: 'Vault.js API Documentation',
             customCssUrl:
                 'https://cdn.gisthostfor.me/dev-xero-rDghJZYc4z-swagger.css',
         })
     );
+
+    app.use('/v1/auth', authRouter);
 
     app.get('/', cached('5 minutes'), (_: Request, res: Response) => {
         /**
