@@ -9,6 +9,8 @@ import helmet from 'helmet';
 import express, { Request, Response } from 'express';
 import http from '@constants/http';
 import swaggerSpec from '@docs/gen/swagger.json';
+import cached from '@middleware/cache';
+import notFoundHandler from '@middleware/notfound';
 
 /**
  * Application entry point, configures environment variables, middlewares and routers.
@@ -29,12 +31,13 @@ export async function startApplication() {
         '/docs',
         swaggerUi.serve,
         swaggerUi.setup(swaggerSpec, {
+            customSiteTitle: 'Vault.js API Documentation',
             customCssUrl:
                 'https://cdn.gisthostfor.me/dev-xero-rDghJZYc4z-swagger.css',
         })
     );
 
-    app.get('/', (_: Request, res: Response) => {
+    app.get('/', cached('5 minutes'), (_: Request, res: Response) => {
         /**
          * #swagger.tags = ["Base"]
          * #swagger.summary = "Used for health checks, returns 200."
@@ -47,6 +50,8 @@ export async function startApplication() {
             code: http.OK,
         });
     });
+
+    app.use(notFoundHandler);
 
     app.listen(port, () =>
         logger.info(
