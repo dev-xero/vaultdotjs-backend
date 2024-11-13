@@ -24,7 +24,7 @@ class DatabaseProvider {
             throw err;
         });
 
-        logger.info('Successfully connected database.');
+        logger.info('Database connected successfully.');
     }
 }
 

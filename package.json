@@ -31,6 +31,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "5.0.0",
     "@types/helmet": "^4.0.0",
+    "@types/redis": "^4.0.11",
     "@types/swagger-ui-express": "^4.1.7",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
@@ -49,6 +50,7 @@
     "express-rate-limit": "^7.4.1",
     "helmet": "^8.0.0",
     "prisma": "^5.22.0",
+    "redis": "^4.7.0",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0"

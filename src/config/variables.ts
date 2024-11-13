@@ -21,4 +21,5 @@ export const env = Object.freeze({
             isInDevelopment: environment.DEV == process.env.ENVIRONMENT,
         },
     },
+    redisURI: process.env.REDIS_URI,
 });
