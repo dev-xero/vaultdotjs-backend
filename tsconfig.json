@@ -23,6 +23,7 @@
             "@config/*": ["src/config/*"],
             "@constants/*": ["src/constants/*"],
             "@core/*": ["src/core/*"],
+            "@docs/*": ["src/docs/*"],
             "@middleware/*": ["src/middleware/*"],
             "@utils/*": ["src/utils/*"]
         }

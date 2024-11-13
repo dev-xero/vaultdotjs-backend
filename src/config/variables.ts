@@ -10,6 +10,7 @@ dotenv.config();
 export const env = Object.freeze({
     app: {
         port: parseInt(process.env.PORT ?? '8000', 10) || 8000,
+        hostname: process.env.HOSTNAME,
         address:
             process.env.ENVIRONMENT == 'dev'
                 ? `http://${process.env.HOSTNAME}:${process.env.PORT}`

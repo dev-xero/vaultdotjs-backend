@@ -7,6 +7,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import express, { Request, Response } from 'express';
 import http from '@constants/http';
+import generateSwaggerSpec from 'src/docs/swagger';
 
 /**
  * Application entry point, configures environment variables, middlewares and routers.
@@ -31,6 +32,15 @@ export async function startApplication() {
             code: http.OK,
         });
     });
+
+    // generate docs each time in dev
+    if (env.app.environment.isInDevelopment) {
+        await generateSwaggerSpec().catch((err) => {
+            logger.error('Failed to generate swagger docs.');
+            logger.error(err);
+            process.exit(1);
+        });
+    }
 
     app.listen(port, () =>
         logger.info(
