@@ -1,7 +1,8 @@
 import { join } from 'path';
-import root from 'app-root-path';
-import { createLogger, transports, format } from 'winston';
 import { env } from '@config/variables';
+import { createLogger, transports, format } from 'winston';
+
+import root from 'app-root-path';
 
 const { combine, printf, timestamp, colorize } = format;
 
@@ -47,7 +48,7 @@ function developmentLogger() {
     });
 }
 
-// Provides dev or prod logger depending on env
+// Provides dev or prod logger depending on env.
 const logger = env.app.environment.isInDevelopment
     ? developmentLogger()
     : productionLogger();

@@ -1,5 +1,6 @@
 import { environment } from './environment';
-import dotenv from "dotenv";
+
+import dotenv from 'dotenv';
 
 dotenv.config();
 
