@@ -1,4 +1,5 @@
 import http from '@constants/http';
+import { BadRequestError } from '@errors/bad.request.error';
 import { Request, Response, NextFunction } from 'express';
 
 /**
@@ -10,7 +11,7 @@ import { Request, Response, NextFunction } from 'express';
  * @param next Next middleware function
  */
 export async function signup(req: Request, res: Response, next: NextFunction) {
-    throw new Error("hahaha");
+    throw new BadRequestError('this has not been implemented yet!');
     // return res.status(http.OK).json({
     //     status: 'success',
     //     message: 'User account created successfully.',

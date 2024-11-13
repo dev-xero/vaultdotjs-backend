@@ -1,4 +1,5 @@
 import { env } from '@config/variables';
+import { authRouter } from '@core/auth';
 
 import swaggerUi from 'swagger-ui-express';
 import corsOptions from '@config/cors';
@@ -10,8 +11,8 @@ import express, { Request, Response } from 'express';
 import http from '@constants/http';
 import swaggerSpec from '@docs/gen/swagger.json';
 import cached from '@middleware/cache';
-import notFoundHandler from '@middleware/notfound';
-import { authRouter } from '@core/auth';
+import notFoundHandler from '@middleware/errorhandler';
+import globalErrorHandler from '@middleware/errorhandler';
 
 /**
  * Application entry point, configures environment variables, middlewares and routers.
@@ -55,6 +56,7 @@ export async function startApplication() {
     });
 
     app.use(notFoundHandler);
+    app.use(globalErrorHandler);
 
     app.listen(port, () =>
         logger.info(

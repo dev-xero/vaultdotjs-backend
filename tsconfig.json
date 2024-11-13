@@ -25,6 +25,7 @@
             "@constants/*": ["src/constants/*"],
             "@core/*": ["src/core/*"],
             "@docs/*": ["src/docs/*"],
+            "@errors/*": ["src/errors/*"],
             "@middleware/*": ["src/middleware/*"],
             "@utils/*": ["src/utils/*"]
         }
