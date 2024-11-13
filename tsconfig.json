@@ -20,8 +20,10 @@
         "esModuleInterop": true,
         "baseUrl": "./",
         "paths": {
-            "@core/*": ["src/core/*"],
             "@config/*": ["src/config/*"],
+            "@constants/*": ["src/constants/*"],
+            "@core/*": ["src/core/*"],
+            "@middleware/*": ["src/middleware/*"],
             "@utils/*": ["src/utils/*"]
         }
     },
