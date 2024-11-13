@@ -10,9 +10,10 @@ import { Request, Response, NextFunction } from 'express';
  * @param next Next middleware function
  */
 export async function signup(req: Request, res: Response, next: NextFunction) {
-    return res.status(http.OK).json({
-        status: 'success',
-        message: 'User account created successfully.',
-        code: http.OK,
-    });
+    throw new Error("hahaha");
+    // return res.status(http.OK).json({
+    //     status: 'success',
+    //     message: 'User account created successfully.',
+    //     code: http.OK,
+    // });
 }
