@@ -49,6 +49,7 @@
     "express": "5.0.1",
     "express-rate-limit": "^7.4.1",
     "helmet": "^8.0.0",
+    "joi": "^17.13.3",
     "prisma": "^5.22.0",
     "redis": "^4.7.0",
     "swagger-autogen": "^2.23.7",

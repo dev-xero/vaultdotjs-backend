@@ -1,7 +1,10 @@
-import asyncHandler from '@utils/async.handler';
 import { Router } from 'express';
 import { signup } from './auth.service';
+import { signUpSchema } from 'src/validators';
+
+import asyncHandler from '@utils/async.handler';
 import rateLimited from '@middleware/ratelimiter';
+import validated from '@middleware/validator';
 
 export const authRouter = Router();
 
@@ -14,5 +17,6 @@ authRouter.post(
      * #swagger.path = '/v1/auth/signup'
      */
     rateLimited,
+    validated(signUpSchema),
     asyncHandler(signup)
 );

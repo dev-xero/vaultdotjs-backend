@@ -11,7 +11,7 @@ import express, { Request, Response } from 'express';
 import http from '@constants/http';
 import swaggerSpec from '@docs/gen/swagger.json';
 import cached from '@middleware/cache';
-import notFoundHandler from '@middleware/errorhandler';
+import notFoundHandler from '@middleware/notfound';
 import globalErrorHandler from '@middleware/errorhandler';
 
 /**
