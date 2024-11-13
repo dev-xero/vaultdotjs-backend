@@ -1,0 +1,42 @@
+{
+  "name": "vaultdotjs-backend",
+  "version": "1.0.0",
+  "description": "Vault.js backend system and API.",
+  "main": "server.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prisma:fmt": "yarn prisma format",
+    "prisma:mgr": "yarn prisma migrate dev --name init",
+    "clean": "rm -rf build tsconfig.tsbuildinfo",
+    "build": "tsc && tsc-alias",
+    "start:prod": "yarn build && node --experimental-specifier-resolution=node build/server.js",
+    "start:dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/dev-xero/vaultdotjs-backend"
+  },
+  "keywords": [
+    "db-utility",
+    "database-backup",
+    "cloud-databases"
+  ],
+  "author": "dev-xero",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@types/express": "5.0.0",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@types/dotenv": "^8.2.3",
+    "app-root-path": "^3.1.0",
+    "express": "5.0.1",
+    "winston": "^3.17.0"
+  }
+}
