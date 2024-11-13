@@ -1,6 +1,6 @@
 import { env } from '@config/variables';
 
-export const outputFile = 'src/docs/gen/swagger.json';
+export const swaggerOutputFile = 'src/docs/gen/swagger.json';
 export const endpointsFiles = ['src/core/app/app.module.ts'];
 export const docConfig = {
     info: {

@@ -1,4 +1,4 @@
-import { docConfig, endpointsFiles, outputFile } from './config';
+import { docConfig, endpointsFiles, swaggerOutputFile } from './config';
 
 import swaggerAutogen from 'swagger-autogen';
 import fs from 'node:fs';
@@ -11,7 +11,7 @@ async function generateSwaggerSpec() {
     if (!fs.existsSync(docsDirectory))
         fs.mkdirSync(path.join('src', 'docs', 'gen'));
 
-    await swaggerAutogen(outputFile, endpointsFiles, docConfig);
+    await swaggerAutogen(swaggerOutputFile, endpointsFiles, docConfig);
 }
 
 export default generateSwaggerSpec;
