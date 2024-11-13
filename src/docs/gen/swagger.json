@@ -1,19 +1,23 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "title": "Vault.js Backend API",
     "description": "Swagger API documentation for Vault.js",
     "version": "1.0.0"
   },
-  "host": "localhost",
-  "basePath": "/",
-  "schemes": [
-    "http"
+  "servers": [
+    {
+      "url": "http://localhost:8000/"
+    }
   ],
   "paths": {
     "/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Base"
+        ],
+        "summary": "Used for health checks, returns 200.",
+        "description": "Health check endpoint, returns 200 if the server started successfully.",
         "responses": {
           "default": {
             "description": ""

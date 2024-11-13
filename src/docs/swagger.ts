@@ -11,7 +11,11 @@ async function generateSwaggerSpec() {
     if (!fs.existsSync(docsDirectory))
         fs.mkdirSync(path.join('src', 'docs', 'gen'));
 
-    await swaggerAutogen(swaggerOutputFile, endpointsFiles, docConfig);
+    await swaggerAutogen({ openapi: '3.0.0' })(
+        swaggerOutputFile,
+        endpointsFiles,
+        docConfig
+    );
 }
 
 export default generateSwaggerSpec;

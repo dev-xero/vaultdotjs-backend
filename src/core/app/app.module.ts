@@ -8,7 +8,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import express, { Request, Response } from 'express';
 import http from '@constants/http';
-import generateSwaggerSpec from 'src/docs/swagger';
 import swaggerSpec from '@docs/gen/swagger.json';
 
 /**
@@ -26,15 +25,6 @@ export async function startApplication() {
     app.use(cors(corsOptions));
     app.use(express.urlencoded({ extended: false }));
 
-    // generate docs each time in dev
-    if (env.app.environment.isInDevelopment) {
-        await generateSwaggerSpec().catch((err) => {
-            logger.error('Failed to generate swagger docs.');
-            logger.error(err);
-            process.exit(1);
-        });
-    }
-
     app.use(
         '/docs',
         swaggerUi.serve,
@@ -45,6 +35,11 @@ export async function startApplication() {
     );
 
     app.get('/', (_: Request, res: Response) => {
+        /**
+         * #swagger.tags = ["Base"]
+         * #swagger.summary = "Used for health checks, returns 200."
+         * #swagger.description = "Health check endpoint, returns 200 if the server started successfully."
+         */
         res.status(http.OK).json({
             status: 'success',
             message:

@@ -7,5 +7,5 @@ export const docConfig = {
         title: 'Vault.js Backend API',
         description: 'Swagger API documentation for Vault.js',
     },
-    host: env.app.hostname,
+    host: `${env.app.hostname}:8000`,
 };
