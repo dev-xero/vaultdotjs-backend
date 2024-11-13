@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Database backup job cycle
+enum CYCLE {
+  FIVE_HOURS
+  TWELVE_HOURS
+  DAY
+}
+
+// Database user schema
+model User {
+  id          Int          @id @default(autoincrement())
+  username    String
+  password    String
+  createdAt   DateTime
+  connections Connection[]
+}
+
+// Database connection schema
+model Connection {
+  id          Int      @id @default(autoincrement())
+  type        String
+  host        String
+  port        Int
+  dbuser      String
+  password    String
+  database    String
+  connectedAt DateTime
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  backups     Backup[]
+}
+
+// Database backup schema
+model Backup {
+  id           Int        @id @default(autoincrement())
+  summary      String
+  repeatsEvery CYCLE
+  successful   Boolean
+  startedOn    DateTime
+  completedOn  DateTime
+  connection   Connection @relation(fields: [connectionId], references: [id])
+  connectionId Int
+}
