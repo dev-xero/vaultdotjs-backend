@@ -30,6 +30,10 @@ Full specs [here (roadmap.sh)](https://roadmap.sh/projects/database-backup-utili
 - Docker
 - Swagger (docs)
 
+## API Documentation
+
+The documentation is generated and served using swagger. You can access it from your own instance using the `/docs` endpoint.
+
 ## Configuration (Linux & Unix Environments)
 
 Before running the server, make sure you generate the `swagger.json` spec file using this command:
