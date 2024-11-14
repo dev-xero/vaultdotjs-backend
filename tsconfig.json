@@ -24,10 +24,14 @@
             "@config/*": ["src/config/*"],
             "@constants/*": ["src/constants/*"],
             "@core/*": ["src/core/*"],
+            "@database/*": ["src/database/*"],
             "@docs/*": ["src/docs/*"],
             "@errors/*": ["src/errors/*"],
+            "@helpers/*": ["src/helpers/*"],
             "@middleware/*": ["src/middleware/*"],
-            "@utils/*": ["src/utils/*"]
+            "@providers/*": ["src/providers/*"],
+            "@utils/*": ["src/utils/*"],
+            "@validators/*": ["src/validators/*"]
         }
     },
     "ts-node": {

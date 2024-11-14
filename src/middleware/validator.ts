@@ -1,7 +1,7 @@
 import { BadRequestError } from '@errors/bad.request.error';
 import { extractJoiMessage } from '@utils/transformer';
 import { NextFunction, Request, Response } from 'express';
-import Joi, { ObjectSchema } from 'joi';
+import { ObjectSchema } from 'joi';
 
 // This middleware is responsible for validating request body schemas before processing
 function validated(schema: ObjectSchema) {

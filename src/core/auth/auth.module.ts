@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { signup } from './auth.service';
-import { signUpSchema } from 'src/validators';
+import { signUpSchema } from '@validators/signup.schema';
 
 import asyncHandler from '@utils/async.handler';
 import rateLimited from '@middleware/ratelimiter';

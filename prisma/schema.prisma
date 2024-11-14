@@ -17,7 +17,7 @@ enum CYCLE {
 // Database user schema
 model User {
   id          Int          @id @default(autoincrement())
-  username    String
+  username    String       @unique
   password    String
   createdAt   DateTime
   connections Connection[]
