@@ -1,5 +1,6 @@
 import http from '@constants/http';
 import { BadRequestError } from '@errors/bad.request.error';
+import passwordHelper from '@helpers/password.helper';
 import userHelper from '@helpers/user.helper';
 import logger from '@utils/logger';
 import { Request, Response, NextFunction } from 'express';
@@ -15,17 +16,15 @@ import { Request, Response, NextFunction } from 'express';
 export async function signup(req: Request, res: Response, next: NextFunction) {
     const { username, password } = req.body;
 
-    const isDuplicate = await userHelper.alreadyExists(
-        req.body.username.toLowerCase()
-    );
+    const isDuplicate = await userHelper.alreadyExists(username.toLowerCase());
 
-    if (isDuplicate) {
-        throw new BadRequestError('This user already exists.');
-    }
+    if (isDuplicate) throw new BadRequestError('This user already exists.');
+
+    const hashedPassword = passwordHelper.hash(password);
 
     const record = await userHelper.createUser({
         username: username.toLowerCase(),
-        password,
+        password: hashedPassword,
     });
 
     logger.info('Successfully created new user.');
