@@ -24,11 +24,21 @@ authRouter.post(
 
 authRouter.post(
     '/signin',
-    /**
-     * #swagger.tags = ["Auth"]
-     * #swagger.summary = "Signs in existing users, returns 200 on successful."
-     * #swagger.description = "Rate limited, this endpoint is responsible for signing validated users. Default response code is 200"
-     * #swagger.path = '/v1/auth/signin'
+    /*
+        #swagger.tags = ["Auth"]
+        #swagger.summary = "Signs in existing users, returns 200 on successful."
+        #swagger.description = "Rate limited, this endpoint is responsible for singing validated users. Default response code is 200."
+        #swagger.path = '/v1/auth/signin'
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/authBody"
+                    }
+                }
+            }
+        }
      */
     rateLimited,
     validated(signInSchema),

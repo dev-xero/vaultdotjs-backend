@@ -13,4 +13,12 @@ export const docConfig = {
         description: 'Swagger API documentation for Vault.js',
     },
     host: `${env.app.hostname}:8000`,
+    components: {
+        schemas: {
+            authBody: {
+                $username: 'default',
+                $password: '12345678',
+            },
+        },
+    },
 };

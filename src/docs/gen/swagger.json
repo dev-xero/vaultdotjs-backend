@@ -45,12 +45,43 @@
           "Auth"
         ],
         "summary": "Signs in existing users, returns 200 on successful.",
-        "description": "Rate limited, this endpoint is responsible for signing validated users. Default response code is 200",
+        "description": "Rate limited, this endpoint is responsible for singing validated users. Default response code is 200.",
         "responses": {
           "default": {
             "description": ""
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/authBody"
+              }
+            }
+          }
         }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "authBody": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "default"
+          },
+          "password": {
+            "type": "string",
+            "example": "12345678"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
       }
     }
   }
