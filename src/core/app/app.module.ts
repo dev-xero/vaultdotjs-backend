@@ -7,7 +7,7 @@ import logger from '@utils/logger';
 import compression from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import http from '@constants/http';
 import swaggerSpec from '@docs/gen/swagger.json';
 import cached from '@middleware/cache';
@@ -25,9 +25,23 @@ export async function startApplication() {
 
     app.use(helmet());
     app.use(compression());
-    app.use(express.json());
     app.use(cors(corsOptions));
     app.use(express.urlencoded({ extended: false }));
+
+    app.use(express.json());
+
+    // prevent json parsing errors
+    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+        if (err instanceof SyntaxError) {
+            res.status(http.BAD_REQUEST).json({
+                status: 'syntax_error',
+                message: 'malformed json received.',
+                code: http.BAD_REQUEST,
+            });
+        }
+
+        next();
+    });
 
     app.use(
         '/docs',

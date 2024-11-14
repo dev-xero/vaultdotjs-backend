@@ -23,6 +23,6 @@ class PasswordHelper {
     }
 }
 
-const passwordHelper = new PasswordHelper(15);
+const passwordHelper = new PasswordHelper(8);
 
 export default passwordHelper;
