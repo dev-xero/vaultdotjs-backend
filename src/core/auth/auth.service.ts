@@ -95,7 +95,7 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
 
     const cachedRefreshToken = await tokenHelper.retrieveRefreshToken(username);
     const [accessToken, genRefresh] = tokenHelper.generateTokens(username);
-
+    
     const refreshToken = cachedRefreshToken ? cachedRefreshToken : genRefresh;
 
     if (cachedRefreshToken) logger.info('refresh token still exists, reusing.');
