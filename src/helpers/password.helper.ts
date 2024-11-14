@@ -19,7 +19,7 @@ class PasswordHelper {
 
     // Matches plaintext
     public matches(hash: string, plain: string): boolean {
-        return bcrypt.compareSync(hash, plain);
+        return bcrypt.compareSync(plain, hash);
     }
 }
 

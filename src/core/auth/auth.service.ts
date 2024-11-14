@@ -93,11 +93,12 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
 
     if (!doesPasswordsMath) throw new BadRequestError('Passwords mismatch.');
 
-    let refreshToken = '';
     const cachedRefreshToken = await tokenHelper.retrieveRefreshToken(username);
     const [accessToken, genRefresh] = tokenHelper.generateTokens(username);
 
-    if (!cachedRefreshToken) refreshToken = genRefresh;
+    const refreshToken = cachedRefreshToken ? cachedRefreshToken : genRefresh;
+
+    if (cachedRefreshToken) logger.info('refresh token still exists, reusing.');
 
     logger.info('User signed in successfully.');
 
