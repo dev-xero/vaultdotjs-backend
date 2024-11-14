@@ -11,11 +11,21 @@ export const authRouter = Router();
 
 authRouter.post(
     '/signup',
-    /**
-     * #swagger.tags = ["Auth"]
-     * #swagger.summary = "Creates a new user, returns 201 on successful."
-     * #swagger.description = "Rate limited, this endpoint is responsible for creating new users, it triggers validation checks before doing so. Default response code is 201."
-     * #swagger.path = '/v1/auth/signup'
+    /*
+        #swagger.tags = ["Auth"]
+        #swagger.summary = "Creates a new user, returns 201 on successful."
+        #swagger.description = "Rate limited, this endpoint is responsible for creating new users, it triggers validation checks before doing so. Default response code is 201."
+        #swagger.path = '/v1/auth/signup'
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/authBody"
+                    }
+                }
+            }
+        }
      */
     rateLimited,
     validated(signUpSchema),

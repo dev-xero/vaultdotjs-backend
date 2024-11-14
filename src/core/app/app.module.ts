@@ -46,7 +46,7 @@ export async function startApplication() {
     app.use(
         '/docs',
         swaggerUi.serve,
-        await swaggerUi.setup(swaggerSpec, {
+        swaggerUi.setup(swaggerSpec, {
             customSiteTitle: 'Vault.js API Documentation',
             customCssUrl:
                 'https://cdn.gisthostfor.me/dev-xero-rDghJZYc4z-swagger.css',
@@ -56,11 +56,11 @@ export async function startApplication() {
     app.use('/v1/auth', authRouter);
 
     app.get('/', cached('5 minutes'), (_: Request, res: Response) => {
-        /**
-         * #swagger.tags = ["Base"]
-         * #swagger.summary = "Used for health checks, returns 200."
-         * #swagger.description = "Health check endpoint, returns 200 if the server started successfully."
-         */
+        /*
+            #swagger.tags = ["Base"]
+            #swagger.summary = "Used for health checks, returns 200."
+            #swagger.description = "Health check endpoint, returns 200 if the server started successfully."
+        */
         res.status(http.OK).json({
             status: 'success',
             message:

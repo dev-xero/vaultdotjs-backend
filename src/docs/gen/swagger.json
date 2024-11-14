@@ -36,6 +36,16 @@
           "default": {
             "description": ""
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/authBody"
+              }
+            }
+          }
         }
       }
     },
