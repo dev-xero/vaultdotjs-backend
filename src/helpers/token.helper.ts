@@ -3,6 +3,7 @@ import { InternalServerError } from '@errors/internal.error';
 
 import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
+import redisProvider from '@providers/redis.provider';
 
 class TokenHelper {
     constructor() {}
@@ -27,6 +28,13 @@ class TokenHelper {
             .digest('base64url');
 
         return [accessToken, refreshToken];
+    }
+
+    // Retrieve refresh token
+    public async retrieveRefreshToken(
+        username: string
+    ): Promise<string | null> {
+        return await redisProvider.client.get(username);
     }
 }
 

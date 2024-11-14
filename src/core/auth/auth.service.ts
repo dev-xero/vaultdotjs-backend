@@ -6,6 +6,7 @@ import tokenHelper from '@helpers/token.helper';
 import userHelper from '@helpers/user.helper';
 import redisProvider from '@providers/redis.provider';
 import logger from '@utils/logger';
+import { sanitize } from '@utils/sanitizer';
 import { makeURLSafe } from '@utils/transformer';
 import { Request, Response, NextFunction } from 'express';
 
@@ -35,7 +36,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     // we will not store the passwords as plain text, instead, hash them
     const hashedPassword = passwordHelper.hash(password);
 
-    await userHelper.createUser({
+    const newUser = await userHelper.createUser({
         username: urlSafeUsername,
         password: hashedPassword,
     });
@@ -51,14 +52,61 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     await redisProvider.client.expire(urlSafeUsername, 172800); // expires in 2 days
 
     // request is completed
-    logger.info('Successfully created new user.');
+    logger.info('User created successfully.');
 
     return res.status(http.CREATED).json({
         status: 'success',
         message: 'Successfully created new user.',
         code: http.CREATED,
         data: {
-            username: urlSafeUsername,
+            user: sanitize(newUser, ['password', 'createdAt']),
+            accessToken,
+            refreshToken,
+        },
+    });
+}
+
+/**
+ * Processes signin requests, request body validation and other internal checks
+ * before providing an access and refresh token.
+ *
+ * - Check that the user exists.
+ * - Validate password match.
+ * - Retrieve refresh token from redis.
+ * - Generate a new access token and return user data.
+ *
+ * @param req Request object
+ * @param res Response object
+ * @param next Next middleware function
+ */
+export async function signin(req: Request, res: Response, next: NextFunction) {
+    const { username, password } = req.body;
+
+    const storedUser = await userHelper.findWithUsername(username);
+
+    if (!storedUser) throw new BadRequestError('This user does not exist.');
+
+    const doesPasswordsMath = passwordHelper.matches(
+        storedUser.password,
+        password
+    );
+
+    if (!doesPasswordsMath) throw new BadRequestError('Passwords mismatch.');
+
+    let refreshToken = '';
+    const cachedRefreshToken = await tokenHelper.retrieveRefreshToken(username);
+    const [accessToken, genRefresh] = tokenHelper.generateTokens(username);
+
+    if (!cachedRefreshToken) refreshToken = genRefresh;
+
+    logger.info('User signed in successfully.');
+
+    res.status(http.OK).json({
+        status: 'success',
+        message: 'Successfully signed in.',
+        code: http.OK,
+        data: {
+            user: sanitize(storedUser, ['password', 'createdAt']),
             accessToken,
             refreshToken,
         },
