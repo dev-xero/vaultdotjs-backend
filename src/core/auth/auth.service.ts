@@ -86,12 +86,12 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
 
     if (!storedUser) throw new BadRequestError('This user does not exist.');
 
-    const doesPasswordsMath = passwordHelper.matches(
+    const doesPasswordsMatch = passwordHelper.matches(
         storedUser.password,
         password
     );
 
-    if (!doesPasswordsMath) throw new BadRequestError('Passwords mismatch.');
+    if (!doesPasswordsMatch) throw new BadRequestError('Passwords mismatch.');
 
     const cachedRefreshToken = await tokenHelper.retrieveRefreshToken(username);
     const [accessToken, genRefresh] = tokenHelper.generateTokens(username);
