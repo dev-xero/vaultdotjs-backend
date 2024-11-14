@@ -32,6 +32,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     return res.status(http.CREATED).json({
         status: 'success',
         message: 'Successfully created new user.',
+        code: http.CREATED,
         data: {
             username: record.username,
         },
