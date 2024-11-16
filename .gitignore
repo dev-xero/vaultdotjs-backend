@@ -34,3 +34,7 @@ docker-compose.override.yml
 .vscode/
 *.swp
 .history/
+
+# key files
+private.pem
+public.pem
