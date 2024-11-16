@@ -45,8 +45,9 @@ chmod +x ./scripts/swagger.sh
 
 1. Install npm packages using `yarn install`.
 2. Configure environment variables using the `.env.example` template, see the configuration options [here.](#environment-variables)
-3. Perform prisma migrations using `./scripts/db.sh --migrate`
-4. Start the development server using `./scripts/dev.sh`
+3. Generate public and private keys using `./scripts/genkeys.sh`
+4. Perform prisma migrations using `./scripts/db.sh --migrate`
+5. Start the development server using `./scripts/dev.sh`
 
 These scripts need execution permission which you can grant using `chmod +x <path-to-script>`
 
