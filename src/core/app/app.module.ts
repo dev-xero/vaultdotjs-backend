@@ -13,6 +13,7 @@ import swaggerSpec from '@docs/gen/swagger.json';
 import cached from '@middleware/cache';
 import notFoundHandler from '@middleware/notfound';
 import globalErrorHandler from '@middleware/errorhandler';
+import { connectionRouter } from '@core/connection';
 
 /**
  * Application entry point, configures environment variables, middlewares and routers.
@@ -43,6 +44,7 @@ export async function startApplication() {
         next();
     });
 
+    // serves swagger documentation
     app.use(
         '/docs',
         swaggerUi.serve,
@@ -53,8 +55,11 @@ export async function startApplication() {
         })
     );
 
+    // use all defined routers
     app.use('/v1/auth', authRouter);
+    app.use('/v1/connection', connectionRouter);
 
+    // base endpoint
     app.get('/', cached('5 minutes'), (_: Request, res: Response) => {
         /*
             #swagger.tags = ["Base"]
@@ -69,6 +74,7 @@ export async function startApplication() {
         });
     });
 
+    // not found and error handler middleware
     app.use(notFoundHandler);
     app.use(globalErrorHandler);
 
