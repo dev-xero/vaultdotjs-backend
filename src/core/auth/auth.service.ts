@@ -48,8 +48,8 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
         throw new InternalServerError('Failed to generate user tokens.');
     }
 
-    await redisProvider.client.set(urlSafeUsername, refreshToken);
-    await redisProvider.client.expire(urlSafeUsername, 172800); // expires in 2 days
+    // save refresh token to redis
+    tokenHelper.saveRefreshToken(username, refreshToken);
 
     // request is completed
     logger.info('User created successfully.');
@@ -95,10 +95,15 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
 
     const cachedRefreshToken = await tokenHelper.retrieveRefreshToken(username);
     const [accessToken, genRefresh] = tokenHelper.generateTokens(username);
-    
+
     const refreshToken = cachedRefreshToken ? cachedRefreshToken : genRefresh;
 
-    if (cachedRefreshToken) logger.info('refresh token still exists, reusing.');
+    if (cachedRefreshToken) {
+        logger.info('refresh token still exists, reusing.');
+    } else {
+        // save this to redis
+        tokenHelper.saveRefreshToken(username, refreshToken);
+    }
 
     logger.info('User signed in successfully.');
 

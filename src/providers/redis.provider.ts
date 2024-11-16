@@ -12,10 +12,12 @@ class RedisProvider {
 
     constructor() {}
 
+    // Public accessor method for the redis client
     public get client() {
         return this.redisClient;
     }
 
+    // Setups redis server connection
     public async connect() {
         this.redisClient = await createClient({
             url: env.redisURI,

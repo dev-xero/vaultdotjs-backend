@@ -36,6 +36,12 @@ class TokenHelper {
     ): Promise<string | null> {
         return await redisProvider.client.get(username);
     }
+
+    // Saves a username-refresh token entry
+    public async saveRefreshToken(username: string, token: string) {
+        await redisProvider.client.set(username, token);
+        await redisProvider.client.expire(username, 172800); // expires in 2 days
+    }
 }
 
 const tokenHelper = new TokenHelper();
