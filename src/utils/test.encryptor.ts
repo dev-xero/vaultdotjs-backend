@@ -5,9 +5,8 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const fakeConnectionData = fs.readFileSync(
-    path.join(rootDir.toString(), '.conf'),
-    'utf-8'
+const testConnectionData = JSON.parse(
+    fs.readFileSync(path.join(rootDir.toString(), '.conf.json'), 'utf-8')
 );
 
 const publicKey = fs.readFileSync(path.join(rootDir.toString(), 'public.pem'));
@@ -18,7 +17,7 @@ const encryptedData = crypto.publicEncrypt(
         padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
         oaepHash: 'sha256',
     },
-    Buffer.from(fakeConnectionData, 'utf-8')
+    Buffer.from(JSON.stringify(testConnectionData), 'utf-8')
 );
 
-console.log('Encrypted (fake):', encryptedData.toString('base64'));
+console.log('Encrypted:', encryptedData.toString('base64'));

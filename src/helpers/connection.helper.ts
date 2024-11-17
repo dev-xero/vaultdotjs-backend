@@ -22,7 +22,10 @@ class ConnectionHelper {
 
     // Attempts to connect to a pgsql database pool
     public async connectPgsql(conn: PgsqlConnection) {
-        const pool = new pg.Pool({ ...conn });
+        const pool = new pg.Pool({
+            ...conn,
+            ssl: { rejectUnauthorized: false },
+        });
 
         return await pool.connect();
     }

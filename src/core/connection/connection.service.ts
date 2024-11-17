@@ -56,7 +56,6 @@ export async function establish(
         logger.error(err);
 
         if (err instanceof ApplicationError && err.statusCode != 500) {
-            console.log('here?');
             throw err;
         } else {
             res.status(http.UNPROCESSABLE).json({

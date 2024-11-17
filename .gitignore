@@ -40,4 +40,4 @@ private.pem
 public.pem
 
 # encryptor config
-.conf
+.conf.json
