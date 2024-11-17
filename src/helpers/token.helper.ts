@@ -19,7 +19,7 @@ class TokenHelper {
         const payload = { username };
 
         const accessToken = jwt.sign(payload, env.tokens.accessKey, {
-            expiresIn: '1hr',
+            expiresIn: '1h',
         });
 
         const refreshToken = crypto
@@ -28,6 +28,23 @@ class TokenHelper {
             .digest('base64url');
 
         return [accessToken, refreshToken];
+    }
+
+    // Verify token by comparing against secret key
+    public async verityToken(accessToken: string): Promise<null | any> {
+        try {
+            const secret = env.tokens.accessKey;
+
+            if (!secret) {
+                throw new InternalServerError(
+                    'Secret signing key could not be loaded.'
+                );
+            }
+
+            return jwt.verify(accessToken, secret);
+        } catch (err) {
+            return null;
+        }
     }
 
     // Retrieve refresh token
