@@ -27,7 +27,7 @@ async function authorized(req: Request, res: Response, next: NextFunction) {
 
     // must match
     if (!decoded) {
-        throw new UnauthorizedRequestError('Token blacklisted.');
+        throw new UnauthorizedRequestError('Token expired or blacklisted.');
     }
 
     // decoded username must be sent username

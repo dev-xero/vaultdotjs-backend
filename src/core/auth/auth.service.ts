@@ -99,7 +99,7 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
     const refreshToken = cachedRefreshToken ? cachedRefreshToken : genRefresh;
 
     if (cachedRefreshToken) {
-        logger.info('refresh token still exists, reusing.');
+        logger.info(`Refresh token for user: ${username} still exists, reusing.`);
     } else {
         // save this to redis
         tokenHelper.saveRefreshToken(username, refreshToken);

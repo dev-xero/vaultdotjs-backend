@@ -43,11 +43,6 @@ class EncryptionHelper {
 
             const parsedDecryptedData = JSON.parse(decryptedData.toString());
 
-            //debugging:
-            console.log('parsed decrypted data:', parsedDecryptedData);
-            console.log('parsed user:', parsedDecryptedData.user ?? 'NONE')
-            console.log('parsed password:', parsedDecryptedData.password ?? 'NONE')
-
             if (
                 !(
                     parsedDecryptedData.hasOwnProperty('user') &&
