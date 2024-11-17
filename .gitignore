@@ -38,3 +38,6 @@ docker-compose.override.yml
 # key files
 private.pem
 public.pem
+
+# encryptor config
+.conf
