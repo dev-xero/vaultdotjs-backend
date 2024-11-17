@@ -49,7 +49,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     }
 
     // save refresh token to redis
-    tokenHelper.saveRefreshToken(username, refreshToken);
+    await tokenHelper.saveRefreshToken(username, refreshToken);
 
     // request is completed
     logger.info('User created successfully.');
