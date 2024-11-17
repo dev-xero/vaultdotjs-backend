@@ -1,9 +1,11 @@
-import http from '@constants/http';
 import { ApplicationError } from '@errors/application.error';
-import connectionHelper from '@helpers/connection.helper';
+import { UnprocessableEntityError } from '@errors/unprocessable.error';
+import { NextFunction, Request, Response } from 'express';
+
+import http from '@constants/http';
+import connectionHelper, { PgsqlConnection } from '@helpers/connection.helper';
 import encryptionHelper from '@helpers/encryption.helper';
 import logger from '@utils/logger';
-import { NextFunction, Request, Response } from 'express';
 
 /**
  * Processes and tries to establish a database connection.
@@ -25,7 +27,25 @@ export async function establish(
         const connectionDetails =
             await encryptionHelper.decryptConnectionDetails(req.body.details);
 
-        // await connectionHelper.connectPgsql();
+        // if for whatever reason we still don't have the details, terminate the request
+        if (!connectionDetails) {
+            throw new UnprocessableEntityError(
+                'Connection details could not be validated.'
+            );
+        }
+
+        switch (req.body.type) {
+            case 'pgsql':
+                await connectionHelper.connectPgsql(
+                    connectionDetails as PgsqlConnection
+                );
+                break;
+
+            default:
+                throw new UnprocessableEntityError(
+                    'Something went wrong with this request.'
+                );
+        }
 
         res.status(http.OK).json({
             status: http.OK,
@@ -36,7 +56,7 @@ export async function establish(
         logger.error(err);
 
         if (err instanceof ApplicationError && err.statusCode != 500) {
-            console.log("here?");
+            console.log('here?');
             throw err;
         } else {
             res.status(http.UNPROCESSABLE).json({

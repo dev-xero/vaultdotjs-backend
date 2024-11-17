@@ -4,7 +4,7 @@ import { Connection } from './connection.helper';
 import rootDir from 'app-root-path';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
-import path from 'node:path';
+import path, { parse } from 'node:path';
 import logger from '@utils/logger';
 import { BadRequestError } from '@errors/bad.request.error';
 import { ApplicationError } from '@errors/application.error';
@@ -43,7 +43,7 @@ class EncryptionHelper {
 
             const parsedDecryptedData = JSON.parse(decryptedData.toString());
 
-            console.log('parsed decrypted data:', parsedDecryptedData);
+            // debugging: console.log('parsed decrypted data:', parsedDecryptedData);
 
             if (
                 !parsedDecryptedData.hasOwnProperty('user') ||
@@ -52,7 +52,7 @@ class EncryptionHelper {
                 throw new BadRequestError('Malformed connection details.');
             }
 
-            return null;
+            return parsedDecryptedData;
         } catch (err) {
             logger.error(err);
 

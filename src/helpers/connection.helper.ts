@@ -5,7 +5,7 @@ export interface Connection {
     password: string;
 }
 
-interface PgsqlConnection extends Connection {
+export interface PgsqlConnection extends Connection {
     host: string;
     port: number;
     database: string;
