@@ -46,10 +46,21 @@ chmod +x ./scripts/swagger.sh
 1. Install npm packages using `yarn install`.
 2. Configure environment variables using the `.env.example` template, see the configuration options [here.](#environment-variables)
 3. Generate public and private keys using `./scripts/genkeys.sh`
-4. Perform prisma migrations using `./scripts/db.sh --migrate`
-5. Start the development server using `./scripts/dev.sh`
+4. Encrypt test connection details using `./scripts/encryptor.sh`, from your .conf file, details [here.](#testing-encryption)
+5. Perform prisma migrations using `./scripts/db.sh --migrate`
+6. Start the development server using `./scripts/dev.sh`
 
 These scripts need execution permission which you can grant using `chmod +x <path-to-script>`
+
+
+## Test Encryption
+
+If you need to establish a database connection without the web client:
+
+1. Create a `.conf` file in the root directory. 
+2. You can then put in the connection details and run `./scripts/encryptor.sh` to get it's encrypted form using the public key.
+
+**Note: The public and private key files must have already been generated from the `./scripts/genkeys.sh` script before executing this one.**
 
 ## Environment Variables
 
