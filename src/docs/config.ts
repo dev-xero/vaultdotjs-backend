@@ -5,6 +5,7 @@ export const swaggerOutputFile = 'src/docs/gen/swagger.json';
 export const endpointsFiles = [
     'src/core/app/app.module.ts',
     'src/core/auth/auth.module.ts',
+    'src/core/connection/connection.module.ts',
 ];
 
 export const docConfig = {

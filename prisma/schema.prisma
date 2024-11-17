@@ -14,6 +14,13 @@ enum CYCLE {
   DAY
 }
 
+// Database connection type
+enum DB_TYPE {
+    PGSQL
+    MONGO
+    MYSQL
+}
+
 // Database user schema
 model User {
   id          Int          @id @default(autoincrement())
@@ -26,8 +33,8 @@ model User {
 // Database connection schema
 model Connection {
   id          Int      @id @default(autoincrement())
-  type        String
-  host        String
+  type        DB_TYPE
+  host        String   @unique
   port        Int
   dbuser      String
   password    String
