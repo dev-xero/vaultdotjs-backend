@@ -62,6 +62,8 @@ If you need to establish a database connection without the web client:
 
 **Note: The public and private key files must have already been generated from the `./scripts/genkeys.sh` script before executing this one.**
 
+Never commit your `.conf` file to git.
+
 ## Environment Variables
 
 | Variable | Description |
