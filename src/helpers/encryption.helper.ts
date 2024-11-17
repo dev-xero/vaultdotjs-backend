@@ -6,6 +6,8 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import logger from '@utils/logger';
+import { BadRequestError } from '@errors/bad.request.error';
+import { ApplicationError } from '@errors/application.error';
 
 class EncryptionHelper {
     constructor() {}
@@ -27,6 +29,7 @@ class EncryptionHelper {
                 'utf-8'
             );
 
+            // the data we receive via http is a base64 string, we need the binary format
             const encryptedBinaryData = Buffer.from(encryptedDetails, 'base64');
 
             const decryptedData = crypto.privateDecrypt(
@@ -38,14 +41,28 @@ class EncryptionHelper {
                 encryptedBinaryData
             );
 
-            console.log('decrypted:', decryptedData.toString());
+            const parsedDecryptedData = JSON.parse(decryptedData.toString());
+
+            console.log('parsed decrypted data:', parsedDecryptedData);
+
+            if (
+                !parsedDecryptedData.hasOwnProperty('user') ||
+                !parsedDecryptedData.hasOwnProperty('password')
+            ) {
+                throw new BadRequestError('Malformed connection details.');
+            }
 
             return null;
         } catch (err) {
             logger.error(err);
-            throw new InternalServerError(
-                'Failed to decrypt connection details.'
-            );
+
+            if (err instanceof ApplicationError) {
+                throw err;
+            } else {
+                throw new InternalServerError(
+                    'Failed to decrypt connection details.'
+                );
+            }
         }
     }
 }

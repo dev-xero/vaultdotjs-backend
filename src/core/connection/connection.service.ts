@@ -1,4 +1,5 @@
 import http from '@constants/http';
+import { ApplicationError } from '@errors/application.error';
 import connectionHelper from '@helpers/connection.helper';
 import encryptionHelper from '@helpers/encryption.helper';
 import logger from '@utils/logger';
@@ -34,10 +35,15 @@ export async function establish(
     } catch (err) {
         logger.error(err);
 
-        res.status(http.UNPROCESSABLE).json({
-            status: 'connection_error',
-            message: 'This connection could not be established.',
-            code: http.UNPROCESSABLE,
-        });
+        if (err instanceof ApplicationError && err.statusCode != 500) {
+            console.log("here?");
+            throw err;
+        } else {
+            res.status(http.UNPROCESSABLE).json({
+                status: 'connection_error',
+                message: 'This connection could not be established.',
+                code: http.UNPROCESSABLE,
+            });
+        }
     }
 }

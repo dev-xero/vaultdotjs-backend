@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const fakeConnectionData = {
-    username: 'secureUser',
+    user: 'secureUser',
     password: 'securePassword',
     database: 'secureDatabase',
     host: 'secureHost',
