@@ -99,7 +99,9 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
     const refreshToken = cachedRefreshToken ? cachedRefreshToken : genRefresh;
 
     if (cachedRefreshToken) {
-        logger.info(`Refresh token for user: ${username} still exists, reusing.`);
+        logger.info(
+            `Refresh token for user: ${username} still exists, reusing.`
+        );
     } else {
         // save this to redis
         tokenHelper.saveRefreshToken(username, refreshToken);
@@ -116,5 +118,27 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
             accessToken,
             refreshToken,
         },
+    });
+}
+
+/**
+ * Generates a new access token, refresh token pair for a user.
+ * Any previously cached refresh tokens are deleted.
+ *
+ * @param req Request object
+ * @param res Response object
+ * @param next Next middleware function
+ */
+export async function refresh(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.body;
+
+    const [accessToken, refreshToken] = tokenHelper.generateTokens(username);
+
+    await tokenHelper.saveRefreshToken(username, refreshToken);
+
+    res.status(http.OK).json({
+        status: 'success',
+        message: 'Generated new tokens pair.',
+        data: { accessToken, refreshToken },
     });
 }

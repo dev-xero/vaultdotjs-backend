@@ -73,6 +73,30 @@
         }
       }
     },
+    "/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Generates new refresh and access tokens for users.",
+        "description": "Rate limited, this endpoint can be called to generate a new refresh and access token when both have expired.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/refreshBody"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/connection/establish": {
       "post": {
         "tags": [
@@ -105,6 +129,18 @@
         "required": [
           "username",
           "password"
+        ]
+      },
+      "refreshBody": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "default"
+          }
+        },
+        "required": [
+          "username"
         ]
       }
     }

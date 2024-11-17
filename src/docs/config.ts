@@ -20,6 +20,9 @@ export const docConfig = {
                 $username: 'default',
                 $password: '12345678',
             },
+            refreshBody: {
+                $username: 'default',
+            },
         },
     },
 };
