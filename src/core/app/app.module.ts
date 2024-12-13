@@ -14,6 +14,7 @@ import cached from '@middleware/cache';
 import notFoundHandler from '@middleware/notfound';
 import globalErrorHandler from '@middleware/errorhandler';
 import { connectionRouter } from '@core/connection';
+import { backupRouter } from '@core/backup';
 
 /**
  * Application entry point, configures environment variables, middlewares and routers.
@@ -58,6 +59,7 @@ export async function startApplication() {
     // use all defined routers
     app.use('/v1/auth', authRouter);
     app.use('/v1/connection', connectionRouter);
+    app.use('/v1/backup', backupRouter);
 
     // base endpoint
     app.get('/', cached('5 minutes'), (_: Request, res: Response) => {
