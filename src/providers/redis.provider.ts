@@ -1,14 +1,15 @@
 import { env } from '@config/variables';
-import { createClient } from 'redis';
-import type { RedisClientType } from 'redis';
+import Redis from "ioredis";
+
 
 import logger from '@utils/logger';
+import { InternalServerError } from '@errors/internal.error';
 
 /**
  * Provides and manages an active Redis connection.
  */
 class RedisProvider {
-    private redisClient: RedisClientType;
+    private redisClient: Redis;
 
     constructor() {}
 
@@ -19,9 +20,11 @@ class RedisProvider {
 
     // Setups redis server connection
     public async connect() {
-        this.redisClient = await createClient({
-            url: env.redisURI,
-        });
+        if (!env.redisURI) {
+            throw new InternalServerError("Redis URI is missing.");
+        }
+
+        this.redisClient = new Redis(env.redisURI);
 
         this.redisClient.on('error', (err: any) => {
             logger.error('Failed to connect Redis.');
@@ -31,8 +34,6 @@ class RedisProvider {
         this.redisClient.on('connect', () =>
             logger.info('Redis connected successfully.')
         );
-
-        await this.redisClient.connect();
     }
 }
 
