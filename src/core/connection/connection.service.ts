@@ -3,7 +3,10 @@ import { UnprocessableEntityError } from '@errors/unprocessable.error';
 import { NextFunction, Request, Response } from 'express';
 
 import http from '@constants/http';
-import connectionHelper, { PgsqlConnection } from '@helpers/connection.helper';
+import connectionHelper, {
+    MongoDBConnection,
+    PgsqlConnection,
+} from '@helpers/connection.helper';
 import encryptionHelper from '@helpers/encryption.helper';
 import logger from '@utils/logger';
 import redisProvider from '@providers/redis.provider';
@@ -52,11 +55,34 @@ export async function establish(
                     'connection',
                     JSON.stringify({
                         type: 'pgsql',
-                        ...connectionDetails
+                        ...connectionDetails,
                     })
                 );
 
                 await redisProvider.client.expire(key, 600); // 10 mins
+
+                break;
+
+            case 'mongo':
+                await connectionHelper.connectMongoDB(
+                    connectionDetails as MongoDBConnection
+                );
+
+                logger.info("we actually connected whoooo");
+
+                const mongoKey = `mongo-connection:${username}`;
+
+                // Persist connection details temporarily
+                await redisProvider.client.hset(
+                    mongoKey,
+                    'mongo-connection',
+                    JSON.stringify({
+                        type: 'mongo',
+                        ...connectionDetails,
+                    })
+                );
+
+                await redisProvider.client.expire(mongoKey, 600);
 
                 break;
 
