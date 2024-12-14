@@ -23,7 +23,8 @@ export async function backupPgSQLDatabase(connDetails: PgsqlConnection) {
     const client = await connectionHelper.connectPgsql(connDetails);
     try {
         // Initialize backblaze
-        await b2.authorize();
+        const b2Auth = await b2.authorize();
+        const downloadURL = b2Auth.data.downloadUrl;
 
         // construct backup directory
         const backupDirectory = path.join(
@@ -102,7 +103,11 @@ export async function backupPgSQLDatabase(connDetails: PgsqlConnection) {
             }
         }
 
-        gzipStream.end();
+        await new Promise((resolve, reject) => {
+            gzipStream.on('finish', resolve);
+            gzipStream.on('error', reject);
+            gzipStream.end();
+        });
 
         // Upload backup file to backblaze
         const uploadResponse = await uploadToBackblaze(
@@ -111,7 +116,10 @@ export async function backupPgSQLDatabase(connDetails: PgsqlConnection) {
         );
 
         // Generate signedURL for the file
-        const signedURL = await generateSignedURL(uploadResponse.fileId);
+        const signedURL = await generateSignedURL(
+            uploadResponse.fileName,
+            downloadURL
+        );
 
         return {
             report,
@@ -145,18 +153,18 @@ async function uploadToBackblaze(filePath: string, fileName: string) {
     return uploadResponse.data;
 }
 
-async function generateSignedURL(fileId: string) {
+async function generateSignedURL(fileName: string, downloadURL: string) {
     // await debugBucketInfo();
-
     const validDurationInSeconds = 3600; // 1 hour validity
+
     const downloadAuth = await b2.getDownloadAuthorization({
         bucketId: env.b2.bucketId,
-        fileNamePrefix: fileId,
-        validDurationInSeconds: 3600, // 1 hour validity
+        fileNamePrefix: fileName,
+        validDurationInSeconds,
     });
 
-    const fileInfo = await b2.getFileInfo({ fileId });
-    const downloadUrl = `https://${env.b2.bucketName}.s3.${env.b2.region}.backblazeb2.com/${fileId}`;
+    const downloadUrl = `${downloadURL}/file/vaultdotjs-store/${fileName}`;
+
     return `${downloadUrl}?Authorization=${downloadAuth.data.authorizationToken}`;
 }
 
