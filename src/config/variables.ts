@@ -26,4 +26,11 @@ export const env = Object.freeze({
         accessKey: process.env.ACCESS_TOKEN_KEY,
         refreshKey: process.env.REFRESH_TOKEN_KEY,
     },
+    b2: {
+        applicationKeyId: process.env.BACKBLAZE_APP_KEY_ID || '',
+        applicationKey: process.env.BACKBLAZE_APP_KEY || '',
+        bucketId: process.env.BACKBLAZE_BUCKET_ID || '',
+        bucketName: process.env.BACKBLAZE_BUCKET_NAME || '',
+        region: process.env.BACKBLAZE_BUCKET_REGION || ''
+    },
 });

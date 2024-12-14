@@ -37,14 +37,17 @@ export async function backupPgsql(
         }
 
         const connectionDetails = JSON.parse(savedDetails);
-        
-        const report = await backupPgSQLDatabase(connectionDetails);
+
+        const { blob_link, report } = await backupPgSQLDatabase(
+            connectionDetails
+        );
 
         res.status(http.OK).json({
             status: 'success',
-            message: 'successfully backed up database.',
+            message:
+                'successfully backed up database, url is valid only for 1 hr.',
             report,
-            blob_link: '',
+            blob_link,
         });
     } catch (err) {
         logger.error(err);

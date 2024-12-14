@@ -11,6 +11,7 @@ This repository contains the server's source code and is part of a NitHub projec
 - Supports downloading database backups via signed URLs.
 - Supports database restoration from backup files.
 - API endpoints documented using Swagger Open API spec.
+- Backups are compressed and uploaded to cloud storage.
 
 ## Specification
 
@@ -26,9 +27,11 @@ Full specs [here (roadmap.sh)](https://roadmap.sh/projects/database-backup-utili
 
 - NodeJs (Typescript & ExpressJs).
 - PostgreSQL.
+- MongoDB.
 - Redis.
-- Docker
-- Swagger (docs)
+- Docker.
+- Swagger (docs).
+- BackBlaze (S3 Compatible Cloud BLOB Storage).
 
 ## API Documentation
 
@@ -75,3 +78,7 @@ Never commit your `.conf.json` file to git.
 | REFRESH_TOKEN_KEY | Secret key for generating refresh tokens |
 | DATABASE_URL | PostgreSQL connection url |
 | REDIS_URI | Redis database connection uri |
+| BACKBLAZE_APP_KEY_ID | Your backblaze key id |
+| BACKBLAZE_APP_KEY | Your backblaze key |
+| BACKBLAZE_BUCKET_ID | Your backblaze bucket id |
+| BACKBLAZE_BUCKET_NAME | Your backblaze bucket name |
