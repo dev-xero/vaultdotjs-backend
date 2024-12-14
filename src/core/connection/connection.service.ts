@@ -6,6 +6,7 @@ import http from '@constants/http';
 import connectionHelper, { PgsqlConnection } from '@helpers/connection.helper';
 import encryptionHelper from '@helpers/encryption.helper';
 import logger from '@utils/logger';
+import redisProvider from '@providers/redis.provider';
 
 /**
  * Processes and tries to establish a database connection.
@@ -13,6 +14,8 @@ import logger from '@utils/logger';
  * it using the server's private key.
  *
  * It handles connecting to pgsql, mongodb and mysql databases.
+ *
+ * Then persists user connection details in redis for 10 mins.
  *
  * @param req Request object
  * @param res Response object
@@ -24,6 +27,7 @@ export async function establish(
     next: NextFunction
 ) {
     try {
+        const { username } = req.body;
         const connectionDetails =
             await encryptionHelper.decryptConnectionDetails(req.body.details);
 
@@ -39,6 +43,21 @@ export async function establish(
                 await connectionHelper.connectPgsql(
                     connectionDetails as PgsqlConnection
                 );
+
+                const key = `connection:${username}`;
+
+                // Persist connection details temporarily
+                await redisProvider.client.hset(
+                    key,
+                    'connection',
+                    JSON.stringify({
+                        type: 'pgsql',
+                        ...connectionDetails
+                    })
+                );
+
+                await redisProvider.client.expire(key, 600); // 10 mins
+
                 break;
 
             default:

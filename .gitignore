@@ -41,3 +41,6 @@ public.pem
 
 # encryptor config
 .conf.json
+
+# backups
+backups/

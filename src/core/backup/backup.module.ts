@@ -3,13 +3,14 @@ import rateLimited from '@middleware/ratelimiter';
 import validated from '@middleware/validator';
 import { connectionSchema } from '@validators/connection.schema';
 import { Router } from 'express';
-import { backup } from './backup.service';
+import { backupPgsql } from './backup.service';
 import asyncHandler from '@utils/async.handler';
+import { BackUpSchema } from '@validators/backup.schema';
 
 export const backupRouter = Router();
 
 backupRouter.post(
-    '/',
+    '/pgsql',
     /*
         #swagger.tags = ["Backup"]
         #swagger.summary = "Attempts to backup a database after connection"
@@ -18,6 +19,6 @@ backupRouter.post(
      */
     rateLimited,
     authorized,
-    validated(connectionSchema),
-    asyncHandler(backup)
+    validated(BackUpSchema),
+    asyncHandler(backupPgsql)
 );
