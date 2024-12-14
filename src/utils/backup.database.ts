@@ -178,13 +178,12 @@ async function ensureBackupDirectoryExists(backupPath: string) {
     }
 }
 
+// DEBUGGING PURPOSES
 async function debugBucketInfo() {
     try {
-        // List all buckets to verify names
         const buckets = await b2.listBuckets();
         console.log('Available Buckets:', buckets.data.buckets);
 
-        // Print the specific bucket name you're trying to use
         console.log('Attempted Bucket Name:', env.b2.bucketName);
     } catch (error) {
         console.error('Error listing buckets:', error);
