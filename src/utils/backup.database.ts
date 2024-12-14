@@ -1,4 +1,7 @@
-import connectionHelper, { PgsqlConnection } from '@helpers/connection.helper';
+import connectionHelper, {
+    MongoDBConnection,
+    PgsqlConnection,
+} from '@helpers/connection.helper';
 import { createWriteStream } from 'node:fs';
 import { createGzip } from 'zlib';
 import { pipeline } from 'stream';
@@ -128,6 +131,89 @@ export async function backupPgSQLDatabase(connDetails: PgsqlConnection) {
     } catch (err) {
         logger.error(
             `Backup for database: ${connDetails.database} failed to complete.`
+        );
+        throw err;
+    }
+}
+
+export async function backupMongoDatabase(connDetails: MongoDBConnection) {
+    const client = await connectionHelper.connectMongoDB(connDetails);
+
+    try {
+        const db = client.db(connDetails.database);
+        const collections = await db.listCollections().toArray();
+
+        const b2Auth = await b2.authorize();
+        const downloadURL = b2Auth.data.downloadUrl;
+
+        const backupDirectory = path.join(
+            rootDir.toString(),
+            'backups',
+            'mongo',
+            connDetails.user,
+            connDetails.database
+        );
+
+        await ensureBackupDirectoryExists(backupDirectory);
+
+        const backupFileName = `${connDetails.user}-${
+            connDetails.database
+        }-at-${Date.now()}.json.gz`;
+
+        const backupFilePath = path.join(backupDirectory, backupFileName);
+
+        // Create write and gzip streams
+        const writeStream = createWriteStream(backupFilePath);
+        const gzipStream = createGzip();
+
+        pipe(gzipStream, writeStream);
+
+        const report = [];
+
+        // Write contents to file
+        for (const collection of collections) {
+            const coll = db.collection(collection.name);
+            const cursor = coll.find();
+
+            for await (const doc of cursor) {
+                gzipStream.write(JSON.stringify(doc) + '\n');
+            }
+
+            report.push({
+                collection: collection.name,
+                status: 'successfully backed up.',
+                completedOn: new Date(),
+            });
+
+            logger.info(`Backup completed for collection: ${collection.name}`);
+        }
+
+        // Finalize gzip stream ahahahah
+        await new Promise((resolve, reject) => {
+            gzipStream.on('finish', resolve);
+            gzipStream.on('error', reject);
+            gzipStream.end();
+        });
+
+        // Upload backup file to backblaze
+        const uploadResponse = await uploadToBackblaze(
+            backupFilePath,
+            backupFileName
+        );
+
+        // Generate signedURL for the file
+        const signedURL = await generateSignedURL(
+            uploadResponse.fileName,
+            downloadURL
+        );
+
+        return {
+            report,
+            blob_link: signedURL,
+        };
+    } catch (err) {
+        logger.error(
+            `Backup for database (mongo): ${connDetails.database} failed to complete.`
         );
         throw err;
     }
